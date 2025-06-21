@@ -1,0 +1,14 @@
+# Node.js backend
+backend/node_modules/
+backend/.env
+backend/*.log
+
+# Angular frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+
+# Système / IDE
+.vscode/
+.DS_Store
+Thumbs.db
