@@ -24,7 +24,7 @@ app.use(cors());
 // routes d'authentification
 const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
-//routes users
+
 const userRoutes = require('./routes/users.routes');
 app.use('/api/users', userRoutes);
 
@@ -42,6 +42,15 @@ app.use('/api/public', publicRoutes);
 
 const productRoutes = require('./routes/product.routes');
 app.use('/api/products', productRoutes);
+
+const storeProductRoutes = require('./routes/store-products.routes');
+app.use('/api/store-products', storeProductRoutes);
+
+const cartSessionRoutes = require('./routes/cart-session.routes');
+app.use('/api/cart-session', cartSessionRoutes);
+
+const userPreferencesRoutes = require('./routes/user-product-preferences.routes');
+app.use('/api/preferences', userPreferencesRoutes);
 
 
 // Port sur lequel notre serveur va écouter
