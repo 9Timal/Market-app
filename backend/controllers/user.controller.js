@@ -31,7 +31,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userIdToUpdate = req.params.id;
-  const { name, email } = req.body;
+  const { name, lastname, email, role } = req.body;
 
   const currentUserId = req.user.id;
   const currentUserRole = req.user.role;
@@ -43,7 +43,7 @@ const updateUser = async (req, res) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         userIdToUpdate,
-        { name, email },
+        { name, lastname, email },
         { new: true }
       );
       return res.status(200).json({ message: "Profil mis à jour.", updatedUser });
@@ -53,22 +53,31 @@ const updateUser = async (req, res) => {
     }
   }
 
-  // ✅ Cas 2 : modification du profil d’un autre → seulement super_admin
-  if (currentUserRole !== 'super_admin') {
-    return res.status(403).json({ message: "Accès refusé : seuls les super_admin peuvent modifier d'autres comptes." });
+  // ✅ Cas 2 : mise à jour par un super_admin
+  if (currentUserRole === "super_admin") {
+    try {
+      const updateFields = { name, lastname, email };
+      if (role) updateFields.role = role; // autoriser changement de rôle
+
+      const updatedUser = await User.findByIdAndUpdate(
+        userIdToUpdate,
+        updateFields,
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Utilisateur non trouvé." });
+      }
+
+      return res.status(200).json({ message: "Utilisateur mis à jour par un super_admin.", updatedUser });
+    } catch (err) {
+      console.error("Erreur update par super_admin :", err.message);
+      return res.status(500).json({ message: "Erreur serveur." });
+    }
   }
 
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userIdToUpdate,
-      { name, email },
-      { new: true }
-    );
-    return res.status(200).json({ message: "Utilisateur mis à jour par super_admin.", updatedUser });
-  } catch (err) {
-    console.error("Erreur super_admin :", err.message);
-    return res.status(500).json({ message: "Erreur serveur." });
-  }
+  // ❌ Cas interdit
+  return res.status(403).json({ message: "Action non autorisée." });
 };
 
 // GET /api/users/ → liste tous les utilisateurs (réservé au super_admin)

@@ -1,7 +1,12 @@
 // routes/public.routes.js
 const express = require('express');
 const router = express.Router();
-const { getFurnitureForStore } = require('../controllers/public.controller');
+const { 
+    getFurnitureForStore,
+    getPublicProducts,
+    getPublicProductPositions
+
+ } = require('../controllers/public.controller');
 
 // Accessible sans restriction → lecture seule pour affichage 3D
 router.get('/scene/:storeId', getFurnitureForStore);
