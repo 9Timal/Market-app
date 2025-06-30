@@ -1,0 +1,29 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { AuthCheckResponse } from '../models/auth-check';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private apiUrlAuth = 'http://localhost:3000/api/auth'; 
+
+  constructor(
+    private http: HttpClient,
+    private router :Router
+  ) {}
+
+  checkToken(): Observable<AuthCheckResponse> {
+    return this.http.get<AuthCheckResponse>(`${this.apiUrlAuth}/check`);
+  }
+
+   logout(): void {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    // Si tu stockes d'autres choses, supprime-les ici aussi
+    this.router.navigate(['/login']);
+  }
+}
