@@ -48,10 +48,41 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  const { name, category, marque, barcode } = req.query;
+
+  const filters = {};
+
+  if (name) {
+    filters.name = { $regex: `.*${name}.*`, $options: 'i' };
+  }
+  
+  if (category) {
+    filters.category = { $regex: `.*${category}.*`, $options: 'i' };
+  }
+  
+  if (marque) {
+    filters.marque = { $regex: `.*${marque}.*`, $options: 'i' };
+  }
+  
+  if (barcode) {
+    filters.barcode = { $regex: `.*${barcode}.*`, $options: 'i' };
+  }
+
+  try {
+    const products = await Product.find(filters).limit(15).sort({ name: 1 });
+    res.json(products);
+  } catch (err) {
+    console.error('❌ Erreur recherche produits :', err);
+    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  searchProducts
 };

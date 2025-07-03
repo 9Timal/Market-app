@@ -1,0 +1,57 @@
+<div class="centre-container">
+
+  <div class="top-bar">
+    <button class="add-user-btn" (click)="toggleAddForm()">+ Ajouter magasin</button>
+  </div>
+
+  <div class="search-bar">
+    <input [(ngModel)]="search.name" placeholder="Nom du magasin" />
+    <input [(ngModel)]="search.city" placeholder="Ville" />
+    <input [(ngModel)]="search.zip_code" placeholder="Code postal" />
+    <button (click)="onSearch()">🔍 Rechercher</button>
+    <button (click)="getAllStores()">📋 Tous</button>
+  </div>
+
+  <div *ngIf="showAddForm" class="add-user-form">
+    <input [(ngModel)]="newStore.name" placeholder="Nom du magasin" />
+    <input [(ngModel)]="newStore.address" placeholder="Adresse" />
+    <input [(ngModel)]="newStore.city" placeholder="Ville" />
+    <input [(ngModel)]="newStore.zip_code" placeholder="Code postal" />
+    <button (click)="onAddStore()">✅ Enregistrer</button>
+  </div>
+
+  <div class="user-table" *ngIf="stores.length > 0">
+    <div class="table-header">
+      <div>Nom</div>
+      <div>Adresse</div>
+      <div>Ville</div>
+      <div>Code postal</div>
+      <div>Actions</div>
+    </div>
+
+    <div
+      class="table-row"
+      *ngFor="let store of stores"
+      (click)="selectStore(store)"
+    >
+      <div>{{ store.name }}</div>
+      <div>{{ store.address }}</div>
+      <div>{{ store.city }}</div>
+      <div>{{ store.zip_code }}</div>
+      <div class="actions">
+        <button class="trash-btn" (click)="onDeleteStore(store._id); $event.stopPropagation()">🗑</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedStore" class="user-details">
+    <h3>Détails du magasin</h3>
+    <input [(ngModel)]="selectedStore.name" placeholder="Nom" />
+    <input [(ngModel)]="selectedStore.address" placeholder="Adresse" />
+    <input [(ngModel)]="selectedStore.city" placeholder="Ville" />
+    <input [(ngModel)]="selectedStore.zip_code" placeholder="Code postal" />
+    <button (click)="onUpdateStore()">💾 Sauvegarder</button>
+    <button (click)="selectedStore = null" class="close-btn">✖ Fermer</button>
+  </div>
+
+</div>

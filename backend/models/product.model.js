@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+  marque:{
+    type: String,
+    required:true
+  },
   category: {
     type: String,
     required: true

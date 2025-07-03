@@ -1,0 +1,58 @@
+<div class="centre-container">
+
+  <div class="top-bar">
+    <button class="btn-dev" (click)="getAllProducts()">Voir tout</button>
+    <button class="add-product-btn" (click)="toggleAddForm()">+ Ajouter produit</button>
+  </div>
+
+  <div class="search-bar">
+    <input [(ngModel)]="search.name" placeholder="Nom produit">
+    <input [(ngModel)]="search.category" placeholder="Catégorie">
+    <input [(ngModel)]="search.marque" placeholder="Marque">
+    <input [(ngModel)]="search.barcode" placeholder="Code-barres">
+    <button (click)="onSearch()">🔍 Rechercher</button>
+  </div>
+
+  <div *ngIf="showAddForm" class="add-product-form">
+    <input [(ngModel)]="newProduct.name" placeholder="Nom">
+    <input [(ngModel)]="newProduct.category" placeholder="Catégorie">
+    <input [(ngModel)]="newProduct.marque" placeholder="Marque">
+    <input [(ngModel)]="newProduct.barcode" placeholder="Code-barres">
+    <input [(ngModel)]="newProduct.image_url" placeholder="URL image">
+    <button (click)="onAddProduct()">✅ Enregistrer</button>
+  </div>
+
+  <div *ngIf="products.length > 0" class="product-table">
+    <div class="table-header">
+      <div>Image</div>
+      <div>Nom</div>
+      <div>Catégorie</div>
+      <div>Marque</div>
+      <div>Code-barres</div>
+      <div>Actions</div>
+    </div>
+
+    <div class="table-row" *ngFor="let p of products" (click)="selectProduct(p)" [attr.data-id]="p._id">
+      <div><img [src]="p.image_url" alt="Image produit" class="product-img" /></div>
+      <div>{{ p.name }}</div>
+      <div>{{ p.category }}</div>
+      <div>{{ p.marque }}</div>
+      <div>{{ p.barcode }}</div>
+      <div class="actions">
+        <button class="trash-btn" (click)="onDeleteProduct(p._id); $event.stopPropagation()">🗑</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedProduct" class="product-details">
+    <h4>Détails du produit</h4>
+    <input [(ngModel)]="selectedProduct.name" placeholder="Nom">
+    <input [(ngModel)]="selectedProduct.category" placeholder="Catégorie">
+    <input [(ngModel)]="selectedProduct.marque" placeholder="Marque">
+    <input [(ngModel)]="selectedProduct.barcode" placeholder="Code-barres">
+    <input [(ngModel)]="selectedProduct.image_url" placeholder="URL image">
+    <button (click)="onUpdateProduct()">💾 Enregistrer</button>
+    <button class="close-btn" (click)="selectedProduct = null">❌ Fermer</button>
+  </div>
+
+</div>

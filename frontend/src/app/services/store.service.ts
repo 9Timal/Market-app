@@ -36,4 +36,30 @@ export class StoreService {
     // 🔁 Requête GET vers le backend avec les filtres
     return this.http.get<Store[]>(`${this.API_URL}/search`, { params });
   }
+
+   // 📥 Ajouter un magasin
+  createStore(store: Partial<Store>): Observable<any> {
+    return this.http.post(`${this.API_URL}`, store);
+  }
+
+  // 📤 Modifier un magasin
+  updateStore(id: string, updates: Partial<Store>): Observable<any> {
+    return this.http.put(`${this.API_URL}/${id}`, updates);
+  }
+
+  // ❌ Supprimer un magasin
+  deleteStore(id: string): Observable<any> {
+    return this.http.delete(`${this.API_URL}/${id}`);
+  }
+
+  // 📦 Récupérer tous les magasins (utile pour test ou dev)
+  getAllStores(): Observable<Store[]> {
+    return this.http.get<Store[]>(`${this.API_URL}`);
+  }
+
+  // 📄 Récupérer un magasin par ID (utile pour édition)
+  getStoreById(id: string): Observable<Store> {
+    return this.http.get<Store>(`${this.API_URL}/${id}`);
+  }
+
 }
