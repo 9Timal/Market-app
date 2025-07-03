@@ -7,14 +7,17 @@ const {
   updateUser,
   getUserById,
   getAllUsers,
-  updatePassword
+  updatePassword,
+  searchUsers
 } = require('../controllers/user.controller');
 
 // 🔐 Toutes les routes sont protégées par authMiddleware
 
+router.get('/search', authMiddleware, searchUsers);
 // Récupérer un utilisateur par ID (lui-même ou super_admin)
 router.get('/:id', authMiddleware, getUserById);
 
+router.get('/:id', authMiddleware, getUserById);
 // Mettre à jour les infos (nom/email) (lui-même ou super_admin)
 router.put('/:id', authMiddleware, updateUser);
 

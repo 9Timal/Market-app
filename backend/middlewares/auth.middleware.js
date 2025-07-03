@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Accès refusé. Token manquant." });
   }
 
-  const token = authHeader.split(" ")[2];
+  const token = authHeader.split(" ")[1];
 
   try {
     // 2. Vérifie et décode le token
@@ -24,4 +24,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = authMiddleware ;

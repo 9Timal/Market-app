@@ -4,12 +4,13 @@ import { UserRegisterDTO } from '../../DTO/user-register.dto';
 import { UserLoginDTO } from '../../DTO/user-login.dto';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../../models/login-response.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private API_URL = 'http://localhost:3000/api/auth'; // adapte si besoin
+  private API_URL = `${environment.apiUrl}/api/auth`; // adapte si besoin
 
   constructor(private http: HttpClient) {}
 

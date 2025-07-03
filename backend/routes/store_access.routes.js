@@ -6,7 +6,7 @@ const {
   createAccess,
   updateAccess,
   deleteAccess,
-  getAccessByStore
+  getAccessForUserInStore
 } = require('../controllers/store_access.controller');
 
 // Routes protégées par token
@@ -15,6 +15,6 @@ router.post('/', auth, createAccess);
 router.put('/:id', auth, updateAccess);
 router.delete('/:id', auth, deleteAccess);
 //récupère toute les personnes ayant des accès dans un magasin
-router.get('/store/:storeId', auth, getAccessByStore);
+router.get('/access/:storeId/:userId', auth, getAccessForUserInStore);
 
 module.exports = router;

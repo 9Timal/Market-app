@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthCheckResponse } from '../models/auth-check';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrlAuth = 'http://localhost:3000/api/auth'; 
+  private apiUrlAuth = `${environment.apiUrl}/api/auth`; 
 
   constructor(
     private http: HttpClient,
@@ -25,5 +26,10 @@ export class AuthService {
     localStorage.removeItem('user');
     // Si tu stockes d'autres choses, supprime-les ici aussi
     this.router.navigate(['/login']);
+  }
+
+  getCurrentUser() {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
   }
 }

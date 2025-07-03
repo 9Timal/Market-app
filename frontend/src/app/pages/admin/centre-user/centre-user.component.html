@@ -1,0 +1,74 @@
+<div class="centre-container">
+
+  <!-- 🔼 Bouton Ajouter -->
+  <div class="top-bar">
+    <button class="add-user-btn" (click)="showAddForm = !showAddForm">+ Ajouter un utilisateur</button>
+  </div>
+  <!-- 🔧 Bouton temporaire pour DEV -->
+    <button (click)="getAllUsersDev()" class="btn-dev">
+    🔧 Tous les utilisateurs (DEV)
+    </button>
+
+  <!-- ➕ Formulaire d’ajout -->
+  <form *ngIf="showAddForm" class="add-user-form" (ngSubmit)="onAddUser()">
+    <input type="text" placeholder="Nom" [(ngModel)]="newUser.lastname" name="lastname" required>
+    <input type="text" placeholder="Prénom" [(ngModel)]="newUser.name" name="name" required>
+    <input type="email" placeholder="Email" [(ngModel)]="newUser.email" name="email" required>
+    
+    <select [(ngModel)]="newUser.role" name="role" required>
+      <option value="" disabled selected>Choisir un rôle</option>
+      <option value="user">Utilisateur</option>
+      <option value="super_admin">Super Admin</option>
+    </select>
+
+    <!-- mot de passe fixé par défaut côté backend -->
+    <button type="submit">Créer</button>
+  </form>
+
+  <!-- 🔍 Barre de recherche -->
+  <div class="search-bar">
+    <input type="text" placeholder="Nom" [(ngModel)]="search.lastname">
+    <input type="text" placeholder="Prénom" [(ngModel)]="search.name">
+    <input type="text" placeholder="Email" [(ngModel)]="search.email">
+    <button (click)="onSearch()">Rechercher</button>
+  </div>
+
+  <!-- 📋 Résultats -->
+  <div class="user-table">
+    <div class="table-header">
+      <div>Nom</div>
+      <div>Prénom</div>
+      <div>Email</div>
+      <div>Rôle</div>
+      <div>Actions</div>
+    </div>
+
+    <div class="table-row" *ngFor="let user of users"
+         (click)="selectUser(user)"
+         [attr.data-user-id]="user._id">
+      <div>{{ user.lastname }}</div>
+      <div>{{ user.name }}</div>
+      <div>{{ user.email }}</div>
+      <div>{{ user.role }}</div>
+      <div class="actions">
+        <button class="trash-btn" (click)="onDelete(user._id); $event.stopPropagation()">🗑️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧾 Affichage profil -->
+  <div class="user-details" *ngIf="selectedUser">
+    <h3>Profil de {{ selectedUser.name }} {{ selectedUser.lastname }}</h3>
+    <p><strong>Email :</strong> {{ selectedUser.email }}</p>
+
+    <label for="role">Rôle :</label>
+    <select id="role" [(ngModel)]="selectedUser.role">
+      <option value="user">Utilisateur</option>
+      <option value="super_admin">Super Admin</option>
+    </select>
+
+    <button (click)="onUpdateRole()">Enregistrer</button>
+    <button class="close-btn" (click)="selectedUser = null">Fermer</button>
+  </div>
+
+</div>

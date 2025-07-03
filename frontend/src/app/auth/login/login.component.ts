@@ -45,7 +45,7 @@ export class LoginComponent {
     next: (response: LoginResponse) => {
       localStorage.setItem('auth_token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/home']);
     },
     error: (error) => {
       if (error.status === 400) {

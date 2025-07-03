@@ -1,0 +1,20 @@
+<!-- Bouton burger -->
+<div class="burger-icon" *ngIf="!isOpen" (click)="toggleMenu($event)">
+  ☰
+</div>
+
+<!-- Menu déroulant -->
+<div class="menu-content" *ngIf="isOpen">
+    
+  <ul>
+    <li *ngIf="hasLocalAccess">
+      <a [routerLink]="['/dashboard']">Dashboard</a>
+    </li>
+    <li *ngIf="isSuperAdmin">
+      <a [routerLink]="['/centre']">Centre</a>
+    </li>
+    <li>
+      <button (click)="logout()">Déconnexion</button>
+    </li>
+  </ul>
+</div>

@@ -1,5 +1,6 @@
 const Store = require('../models/store.model');
 
+
 // Créer un magasin
 const createStore = async (req, res) => {
   try {
@@ -79,10 +80,40 @@ const deleteStore = async (req, res) => {
   }
 };
 
+// Rechercher des magasins par nom, ville ou code postal (recherche partielle, insensible à la casse, limitée à 10 résultats)
+const searchStores = async (req, res) => {
+  try {
+    const { name, city, zip_code } = req.query;
+
+    // Vérifie qu'au moins un critère est fourni
+    if (!name && !city && !zip_code) {
+      return res.status(400).json({
+        message: 'Veuillez fournir au moins un critère de recherche (name, city ou zip_code).'
+      });
+    }
+
+    // Construction dynamique des filtres
+    const filters = {
+      ...(name && { name: { $regex: name, $options: 'i' } }),
+      ...(city && { city: { $regex: city, $options: 'i' } }),
+      ...(zip_code && { zip_code: { $regex: zip_code, $options: 'i' } })
+    };
+
+    // Recherche avec limite de 10 résultats
+    const results = await Store.find(filters).limit(10);
+
+    res.status(200).json(results);
+  } catch (err) {
+    console.error('Erreur recherche magasins :', err.message);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
 module.exports = {
   createStore,
   getAllStores,
   getStoreById,
   updateStore,
   deleteStore,
+  searchStores
 };

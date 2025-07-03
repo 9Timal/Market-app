@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 
-const deleteUser = async (req, res) => {
+ const deleteUser = async (req, res) => {
   const userIdToDelete = req.params.id;
   const userRequestingId = req.user.id; // ID récupéré depuis le token
   const userRequestingRole = req.user.role;
@@ -29,7 +29,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+ const updateUser = async (req, res) => {
   const userIdToUpdate = req.params.id;
   const { name, lastname, email, role } = req.body;
 
@@ -81,7 +81,7 @@ const updateUser = async (req, res) => {
 };
 
 // GET /api/users/ → liste tous les utilisateurs (réservé au super_admin)
-const getAllUsers = async (req, res) => {
+ const getAllUsers = async (req, res) => {
   if (req.user.role !== 'super_admin') {
     return res.status(403).json({ message: "Accès réservé aux super_admins." });
   }
@@ -95,7 +95,7 @@ const getAllUsers = async (req, res) => {
 };
 
 // GET /api/users/:id → détail d’un utilisateur (accès à soi ou super_admin)
-const getUserById = async (req, res) => {
+ const getUserById = async (req, res) => {
   const userId = req.params.id;
   const isSelf = req.user.id === userId;
 
@@ -113,7 +113,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-const updatePassword = async (req, res) => {
+ const updatePassword = async (req, res) => {
   const userId = req.params.id;
   const currentUserId = req.user.id;
 
@@ -147,10 +147,39 @@ const updatePassword = async (req, res) => {
   }
 };
 
+// GET /api/users/search?firstName=...&lastName=...&email=...
+
+ const searchUsers = async (req, res) => {
+  const { name, lastname, email } = req.query;
+
+  const filters = {};
+
+  if (name) {
+    filters.name = { $regex: new RegExp(name, 'i') };
+  }
+
+  if (lastname) {
+    filters.lastname = { $regex: new RegExp(lastname, 'i') };
+  }
+
+  if (email) {
+    filters.email = { $regex: new RegExp(email, 'i') };
+  }
+
+  try {
+    const users = await User.find(filters).limit(15).sort({ lastname: 1 });
+    res.json(users);
+  } catch (err) {
+    console.error('❌ Erreur recherche utilisateurs :', err);
+    res.status(500).json({ message: 'Erreur serveur', error: err.message });
+  }
+};
+
 module.exports = { 
   deleteUser,
   updateUser,
   getUserById,
   getAllUsers,
-  updatePassword  
+  updatePassword,
+  searchUsers
 };

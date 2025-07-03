@@ -1,4 +1,5 @@
 const StoreAccess = require('../models/storeAccess.model');
+const User = require('../models/user.model');
 
 // 🔍 GET : Récupérer tous les accès d’un utilisateur
 const getAccessForUser = async (req, res) => {
@@ -79,15 +80,35 @@ const deleteAccess = async (req, res) => {
 };
 
 // GET /api/access/store/:storeId → Liste des accès d’un magasin
-const getAccessByStore = async (req, res) => {
-  const { storeId } = req.params;
+const getAccessForUserInStore = async (req, res) => {
+  const { storeId, userId } = req.params;
 
   try {
-    const accesses = await StoreAccess.find({ store_id: storeId })
-      .populate('user_id', 'name email role') // pour inclure les infos de l’utilisateur
-      .populate('store_id', 'name'); // optionnel, si tu veux afficher aussi le nom du magasin
+    // On récupère d'abord l'utilisateur
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    }
 
-    res.status(200).json(accesses);
+    // Puis on cherche l'accès à ce magasin
+    const access = await StoreAccess.findOne({ user: userId, store: storeId });
+    if (!access) {
+      return res.status(404).json({ message: "Aucun accès trouvé pour cet utilisateur dans ce magasin." });
+    }
+
+    // Tout est bon, on répond avec les infos utiles
+    res.status(200).json({
+      message: "Accès trouvé.",
+      user: {
+        _id: user._id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+        role: user.role
+      },
+      access: access.role_in_store
+    });
+
   } catch (err) {
     console.error("Erreur récupération accès par store :", err.message);
     res.status(500).json({ message: "Erreur serveur." });
@@ -95,10 +116,11 @@ const getAccessByStore = async (req, res) => {
 };
 
 
+
 module.exports = {
   getAccessForUser,
   createAccess,
   updateAccess,
   deleteAccess,
-  getAccessByStore,
+  getAccessForUserInStore,
 };

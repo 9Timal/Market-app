@@ -53,7 +53,26 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// Contrôleur pour vérifier le token
+const checkToken = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    return res.status(200).json({
+      message: 'Token valide',
+      user
+    });
+  } catch (err) {
+    return res.status(500).json({ message: 'Erreur serveur, Token' });
+  }
+};
+
 module.exports = {
   resetPassword,
-  forgotPassword
+  forgotPassword,
+  checkToken
 };

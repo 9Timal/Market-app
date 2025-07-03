@@ -1,1 +1,31 @@
-<p>home works!</p>
+<!-- home.component.html -->
+<div class="home-container">
+  <!-- 👤 Infos utilisateur -->
+  <p>Pour vous, {{ user.name }} {{ user.lastname }}</p>
+
+  <!-- ✅ Si magasin déjà sélectionné -->
+  <ng-container *ngIf="selectedStore; else searchBlock">
+    <p>Magasin actuel : <strong>{{ selectedStore.name }} - {{ selectedStore.city }} ({{ selectedStore.zip_code }})</strong></p>
+    <button (click)="resetStore()">Changer de magasin</button>
+  </ng-container>
+
+  <!-- 🔍 Recherche magasin si non sélectionné -->
+  <ng-template #searchBlock>
+    <p>🔍 Cherchez votre magasin :</p>
+
+    <input type="text" placeholder="Nom du magasin" [formControl]="nameControl" />
+    <input type="text" placeholder="Ville" [formControl]="cityControl" />
+    <input type="text" placeholder="Code postal" [formControl]="zipCodeControl" />
+
+    <div *ngIf="searchResults.length > 0" class="results">
+      <p>Résultats :</p>
+      <div *ngFor="let store of searchResults" class="store-item" (click)="selectStore(store)">
+        {{ store.name }} - {{ store.city }} ({{ store.zip_code }})
+      </div>
+    </div>
+
+    <div *ngIf="searchResults.length === 0 && userTyped">
+      Aucun magasin trouvé pour cette recherche.
+    </div>
+  </ng-template>
+</div>
