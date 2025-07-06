@@ -5,25 +5,24 @@ const register = async (req, res) => {
   const { name, lastname, email, password, role } = req.body;
 
   try {
-    // Vérification de l'existence de l'email
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+
+    // Vérification de l'existence de l'email (en minuscule)
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return res.status(400).json({ message: "Email déjà utilisé." });
     }
 
-    // Hash du mot de passe
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Création du nouvel utilisateur (rôle global forcé à 'user')
     const newUser = new User({
       name,
       lastname,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
-      role:  role || 'user' // Toujours 'user' à l'inscription
+      role: role || 'user'
     });
 
-    // Sauvegarde en BDD
     await newUser.save();
 
     res.status(201).json({ message: "Utilisateur enregistré avec succès." });

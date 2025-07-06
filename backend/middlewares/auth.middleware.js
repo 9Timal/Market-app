@@ -15,8 +15,11 @@ const authMiddleware = (req, res, next) => {
     // 2. Vérifie et décode le token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 3. Ajoute les infos de l’utilisateur dans req.user
-    req.user = decoded; // contient { id, role }
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,  // ✅ Doit venir du token
+      role: decoded.role
+    };
 
     next(); // passe au contrôleur suivant
   } catch (err) {

@@ -6,10 +6,16 @@ const {
   createAccess,
   updateAccess,
   deleteAccess,
-  getAccessForUserInStore
+  getAccessForUserInStore,
+  checkAccess,
+  getAccessByStore
 } = require('../controllers/store_access.controller');
 
 // Routes protégées par token
+
+router.get('/has-access/:storeId', auth, checkAccess);
+
+router.get('/store/:storeId', auth, getAccessByStore);
 router.get('/:userId', auth, getAccessForUser);
 router.post('/', auth, createAccess);
 router.put('/:id', auth, updateAccess);

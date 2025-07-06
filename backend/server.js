@@ -52,6 +52,9 @@ app.use('/api/cart-session', cartSessionRoutes);
 const userPreferencesRoutes = require('./routes/user-product-preferences.routes');
 app.use('/api/preferences', userPreferencesRoutes);
 
+const storeInviteRoutes = require('./routes/storeInvite.routes');
+app.use('/api/store-invite', storeInviteRoutes);
+
 
 // Port sur lequel notre serveur va écouter
 const PORT = process.env.PORT || 3000;

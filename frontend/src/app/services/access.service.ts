@@ -25,7 +25,9 @@ export class AccessService {
   private localRoleSubject = new BehaviorSubject<'admin' | 'chef_admin' | null>(null);
   localRole$ = this.localRoleSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.initSelectedStore();
+  }
 
   /**
    * 📍 Appelé quand l'utilisateur sélectionne un magasin dans l'app
@@ -60,6 +62,33 @@ export class AccessService {
   reset(): void {
     this.selectedStoreSubject.next(null);
     this.localRoleSubject.next(null);
+  }
+
+  /**
+   * Initialise le store sélectionné depuis localStorage
+   * et écoute les changements pour garder localStorage synchronisé.
+   */
+
+  private initSelectedStore(): void {
+    // Rechargement à l'ouverture
+    const stored = localStorage.getItem('selected_store');
+    if (stored) {
+      try {
+        const store: Store = JSON.parse(stored);
+        this.selectedStoreSubject.next(store);
+      } catch {
+        localStorage.removeItem('selected_store');
+      }
+    }
+
+    // Synchro automatique vers localStorage à chaque changement
+    this.selectedStore$.subscribe(store => {
+      if (store) {
+        localStorage.setItem('selected_store', JSON.stringify(store));
+      } else {
+        localStorage.removeItem('selected_store');
+      }
+    });
   }
 }
 

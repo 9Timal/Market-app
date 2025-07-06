@@ -1,0 +1,32 @@
+
+<div class="access-cards">
+  <div
+    class="user-card"
+    *ngFor="let p of filteredPersonnels"
+    [ngClass]="p.role === 'admin' ? 'role-admin' : 'role-chef-admin'"
+  >
+    <div class="card-header">
+      <h3>{{ p.user.name }} {{ p.user.lastname }}</h3>
+      <span class="role-badge">{{ p.role }}</span>
+    </div>
+
+    <button (click)="toggleDetails(p)">
+      {{ p.showDetails ? 'Masquer' : 'Détails' }}
+    </button>
+
+    <!-- 📨 Détails affichés si showDetails est true -->
+    <div class="card-body" *ngIf="p.showDetails">
+      <p>Email : {{ p.user.email }}</p>
+
+      <label for="role">Modifier le rôle :</label>
+      <select [(ngModel)]="p.role" (change)="updateRole(p._id, p.role)">
+        <option value="admin">Admin</option>
+        <option value="chef_admin">Chef Admin</option>
+      </select>
+
+      <button class="delete-btn" (click)="removeAccess(p._id)">
+        🗑 Supprimer l'accès
+      </button>
+    </div>
+  </div>
+</div>

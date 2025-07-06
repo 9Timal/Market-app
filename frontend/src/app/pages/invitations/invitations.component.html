@@ -1,0 +1,17 @@
+<div>
+    <div *ngIf="invitations.length > 0; else noInvites">
+        <div *ngFor="let invite of invitations">
+            <div>Invitation :  {{ invite.role }}</div>
+            <div>chez {{invite.store.name}}</div>
+
+            <button>Accepter</button>
+            <button>Refuser</button>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #noInvites>
+  <p>Aucune invitation trouvée.</p>
+</ng-template>

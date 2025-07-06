@@ -17,7 +17,6 @@ router.get('/search', authMiddleware, searchUsers);
 // Récupérer un utilisateur par ID (lui-même ou super_admin)
 router.get('/:id', authMiddleware, getUserById);
 
-router.get('/:id', authMiddleware, getUserById);
 // Mettre à jour les infos (nom/email) (lui-même ou super_admin)
 router.put('/:id', authMiddleware, updateUser);
 
@@ -29,5 +28,7 @@ router.get('/', authMiddleware, authorizeRole('super_admin'), getAllUsers);
 
 // DELETE utilisateur → uniquement super_admin
 router.delete('/:id', authMiddleware, authorizeRole('super_admin'), deleteUser);
+
+
 
 module.exports = router;

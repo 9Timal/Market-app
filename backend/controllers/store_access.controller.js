@@ -115,6 +115,46 @@ const getAccessForUserInStore = async (req, res) => {
   }
 };
 
+const checkAccess = async (req, res) => {
+  const storeId = req.params.storeId;
+  const userId = req.user.id;
+  const role = req.user.role;
+
+  if (role === 'super_admin') {
+    return res.status(200).json({ access: true });
+  }
+
+  const access = await StoreAccess.findOne({ user: userId, store: storeId });
+  if (access) {
+    return res.status(200).json({ access: true });
+  }
+
+  return res.status(403).json({ access: false });
+};
+
+const getAccessByStore = async (req, res) => {
+  const { storeId } = req.params;
+
+  try {
+    const accesses = await StoreAccess.find({ store: storeId });
+
+    const users = await Promise.all(accesses.map(async (access) => {
+      const user = await User.findById(access.user).select('-password');
+      return {
+        _id: access._id,
+        user: access.user,
+        role: access.role_in_store,
+        user, // contient name, lastname, email, etc.
+      };
+    }));
+
+    res.status(200).json(users);
+  } catch (err) {
+    console.error('Erreur lors de la récupération des accès :', err);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
 
 
 module.exports = {
@@ -123,4 +163,6 @@ module.exports = {
   updateAccess,
   deleteAccess,
   getAccessForUserInStore,
+  checkAccess,
+  getAccessByStore
 };

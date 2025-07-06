@@ -7,9 +7,6 @@ const authorizeFurnitureAccess = async (req, res, next) => {
   // Si super_admin → accès total
   if (role === 'super_admin') return next();
 
-  // Récupère le store_id à partir :
-  // - du body (POST, PUT)
-  // - ou d’un objet furniture existant si nécessaire
   const storeId = req.body.store_id;
 
   if (!storeId) {

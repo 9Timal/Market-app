@@ -1,0 +1,34 @@
+<!-- Bouton pour afficher le formulaire -->
+<button (click)="showInviteForm = !showInviteForm">
+  {{ showInviteForm ? 'Annuler' : '➕ Inviter un utilisateur' }}
+</button>
+
+<!-- Formulaire d'invitation -->
+<div *ngIf="showInviteForm" class="invite-form">
+  <input
+    type="email"
+    placeholder="Email de l'utilisateur"
+    [(ngModel)]="inviteEmail"
+    required
+  />
+
+  <select [(ngModel)]="inviteRole" required>
+    <option value="admin">Admin</option>
+    <option value="chef_admin">Chef Admin</option>
+  </select>
+
+  <button (click)="createInvitation()">Envoyer l'invitation</button>
+</div>
+
+<div *ngIf="invitations.length > 0; else noInvites">
+  <div *ngFor="let invite of invitations">
+    {{ invite.email }} - {{ invite.role }} - {{ invite.status }}
+    <br />
+    Par : {{ invite.created_by.name }} {{ invite.created_by.lastname }}
+  </div>
+</div>
+
+<ng-template #noInvites>
+  <p>Aucune invitation trouvée.</p>
+</ng-template>
+

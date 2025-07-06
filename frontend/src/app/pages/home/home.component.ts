@@ -90,7 +90,6 @@ export class HomeComponent implements OnInit {
 
   selectStore(store: Store): void {
     this.accessService.setSelectedStore(store);
-    alert(`Magasin sélectionné : ${store.name}`);
   }
 
   resetStore(): void {

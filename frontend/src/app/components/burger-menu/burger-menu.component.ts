@@ -25,6 +25,7 @@ export class MenuBurgerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     const user = this.authService.getCurrentUser();
 
     // Rôle global
@@ -41,7 +42,11 @@ export class MenuBurgerComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  
+ get canAccessDashboard(): boolean {
+  const storeExists = !!localStorage.getItem('selected_store');
+  return storeExists && (this.isSuperAdmin || this.hasLocalAccess);
+}
+
 
   toggleMenu(event: MouseEvent): void {
     event.stopPropagation(); // ⛔ empêche le HostListener de le capter
