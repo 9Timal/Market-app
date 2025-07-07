@@ -165,8 +165,6 @@ const getMyInvitations = async (req, res) => {
 };
 
 
-
-
 const acceptInvitation = async (req, res) => {
   try {
     const { id: userId, email } = req.user;
@@ -203,7 +201,7 @@ const acceptInvitation = async (req, res) => {
     }
 
     // Marque l’invitation comme utilisée
-    invitation.status = 'used';
+    invitation.status = 'accepted';
     await invitation.save();
 
     res.status(200).json({ message: "Invitation acceptée et accès accordé." });

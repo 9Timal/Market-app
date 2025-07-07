@@ -4,6 +4,8 @@ import { AccessService } from '../../services/access.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { ElementRef, HostListener } from '@angular/core';
+import { AccessInStore } from '../../models/AccessInStore';
+import { Store } from '../../models/store.model';
 
 @Component({
   selector: 'app-burger-menu',
@@ -16,20 +18,34 @@ export class MenuBurgerComponent implements OnInit {
   isSuperAdmin = false;
   hasLocalAccess = false;
   isOpen = false;
+  
 
   constructor(
     private authService: AuthService,
     private storeAccessService: AccessService,
     private router: Router,
-    private elRef: ElementRef // ← on récupère l’élément HTML du composant
+    private elRef: ElementRef, // ← on récupère l’élément HTML du composant
+    
   ) {}
 
   ngOnInit(): void {
     
-    const user = this.authService.getCurrentUser();
-
     // Rôle global
+    const user = this.authService.getCurrentUser();
     this.isSuperAdmin = user?.role === 'super_admin';
+    
+
+    // 🔄 Restaurer le magasin depuis le localStorage si présent
+    const stored = localStorage.getItem('selected_store');
+    if (stored) {
+      try {
+        const store: Store = JSON.parse(stored);
+        this.accessRole(store);
+      } catch (e) {
+        console.warn("❗Magasin localStorage invalide");
+        localStorage.removeItem('selected_store');
+      }
+    }
 
     // Rôle local (admin ou chef_admin pour un magasin)
     this.storeAccessService.localRole$.subscribe(role => {
@@ -43,9 +59,13 @@ export class MenuBurgerComponent implements OnInit {
   }
 
  get canAccessDashboard(): boolean {
-  const storeExists = !!localStorage.getItem('selected_store');
-  return storeExists && (this.isSuperAdmin || this.hasLocalAccess);
-}
+    const storeExists = !!localStorage.getItem('selected_store');
+    return storeExists && (this.isSuperAdmin || this.hasLocalAccess);
+  }
+  
+  accessRole(store: Store): void {
+    this.storeAccessService.setSelectedStore(store);
+  }
 
 
   toggleMenu(event: MouseEvent): void {

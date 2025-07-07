@@ -1,9 +1,9 @@
-<!-- Bouton pour afficher le formulaire -->
-<button (click)="showInviteForm = !showInviteForm">
+<!-- Toggle bouton -->
+<button class="toggle-form-btn" (click)="showInviteForm = !showInviteForm">
   {{ showInviteForm ? 'Annuler' : '➕ Inviter un utilisateur' }}
 </button>
 
-<!-- Formulaire d'invitation -->
+<!-- Formulaire -->
 <div *ngIf="showInviteForm" class="invite-form">
   <input
     type="email"
@@ -17,18 +17,23 @@
     <option value="chef_admin">Chef Admin</option>
   </select>
 
-  <button (click)="createInvitation()">Envoyer l'invitation</button>
+  <button class="submit-btn" (click)="createInvitation()">Envoyer l'invitation</button>
 </div>
 
-<div *ngIf="invitations.length > 0; else noInvites">
-  <div *ngFor="let invite of invitations">
-    {{ invite.email }} - {{ invite.role }} - {{ invite.status }}
-    <br />
-    Par : {{ invite.created_by.name }} {{ invite.created_by.lastname }}
+<!-- Liste des invitations -->
+<div class="invite-list" *ngIf="invitations.length > 0; else noInvites">
+  <div class="invite-item" *ngFor="let invite of invitations">
+    <p>
+      📧 <strong>{{ invite.email }}</strong> – 
+      <span class="role">{{ invite.role }}</span> – 
+      <span class="status">{{ invite.status }}</span>
+    </p>
+    <p class="creator">
+      Par : {{ invite.created_by.name }} {{ invite.created_by.lastname }}
+    </p>
   </div>
 </div>
 
 <ng-template #noInvites>
-  <p>Aucune invitation trouvée.</p>
+  <p class="no-invites">Aucune invitation trouvée.</p>
 </ng-template>
-

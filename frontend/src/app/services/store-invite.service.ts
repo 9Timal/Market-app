@@ -23,8 +23,8 @@ export class StoreInviteService {
 
   // ➕ Créer une invitation
   createInvitation(storeId: string, email: string, role: 'admin' | 'chef_admin'): Observable<any> {
-        return this.http.post(this.API_URL, { store_id: storeId, email, role })
-            .pipe(tap(() => this._refreshInvites$.next()));; // 🔔 Signale qu'on doit rafraîchir
+    return this.http.post(this.API_URL, { store_id: storeId, email, role })
+        .pipe(tap(() => this._refreshInvites$.next()));; // 🔔 Signale qu'on doit rafraîchir
   }
 
   // 📥 Récupérer toutes les invitations pour un magasin
@@ -44,11 +44,13 @@ export class StoreInviteService {
 
   // ✅ Accepter une invitation
   acceptInvitation(id: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/${id}/accept`, {});
+    return this.http.post(`${this.API_URL}/${id}/accept`, {})
+       .pipe(tap(() => this._refreshInvites$.next()))
   }
 
   // ❌ Refuser une invitation
   refuseInvitation(id: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/${id}/refuse`, {});
+    return this.http.post(`${this.API_URL}/${id}/refuse`, {})
+       .pipe(tap(() => this._refreshInvites$.next()))
   }
 }

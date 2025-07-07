@@ -1,17 +1,30 @@
-<div>
-    <div *ngIf="invitations.length > 0; else noInvites">
-        <div *ngFor="let invite of invitations">
-            <div>Invitation :  {{ invite.role }}</div>
-            <div>chez {{invite.store.name}}</div>
+<div class="invitations-container">
+  <div *ngIf="invitations.length > 0; else noInvites">
+    <div class="invitation-card" *ngFor="let invite of invitations">
+      <div class="invitation-header">
+        <span class="role">{{ invite.role | uppercase }}</span>
+        <span class="store">chez {{ invite.store.name }}</span>
+      </div>
 
-            <button>Accepter</button>
-            <button>Refuser</button>
+      <div *ngIf="invite.status === 'pending'; else statutInvite" class="invitation-actions">
+        <div *ngIf="!isExpired(invite.expires_at); else expiredTemplate">
+          <button class="btn accept" (click)="AccepteInvitation(invite)">Accepter</button>
+          <button class="btn refuse" (click)="RefuseInvitation(invite)">Refuser</button>
         </div>
+      </div>
+
+      <ng-template #statutInvite>
+        <div class="status accepted" *ngIf="invite.status === 'accepted'">✅ Invitation acceptée</div>
+        <div class="status refused" *ngIf="invite.status === 'refused'">❌ Invitation refusée</div>
+      </ng-template>
+
+      <ng-template #expiredTemplate>
+        <div class="status expired">⏱️ Invitation expirée</div>
+      </ng-template>
     </div>
+  </div>
 </div>
 
-
-
 <ng-template #noInvites>
-  <p>Aucune invitation trouvée.</p>
+  <p class="no-invites">Aucune invitation trouvée.</p>
 </ng-template>

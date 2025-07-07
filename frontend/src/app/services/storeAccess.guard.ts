@@ -12,16 +12,17 @@ export const StoreAccessGuard: CanActivateFn = (): Observable<boolean | UrlTree>
     const storeAccessService= inject(StoreAccessService) ;
   
     const token = localStorage.getItem('auth_token');
-    const storeId = localStorage.getItem('selected_store');
+    const storeData = localStorage.getItem('selected_store');
     const userData = localStorage.getItem('user');
 
-    if (!token || !storeId || !userData) {
+    if (!token || !storeData|| !userData) {
       return of(router.parseUrl('/login'));
     }
 
     try {
       const decoded: any = jwtDecode(token);
-      
+      const storeObj = JSON.parse(storeData);
+      const storeId = storeObj._id;
      
       if (decoded.role === 'super_admin') {
         return of(true);

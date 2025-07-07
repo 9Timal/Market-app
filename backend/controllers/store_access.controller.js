@@ -117,7 +117,7 @@ const getAccessForUserInStore = async (req, res) => {
 
 const checkAccess = async (req, res) => {
   const storeId = req.params.storeId;
-  const userId = req.user.id;
+  const userId = req.user._id;
   const role = req.user.role;
 
   if (role === 'super_admin') {
