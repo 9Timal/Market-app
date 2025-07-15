@@ -1,3 +1,81 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #aaa;
+
+        &:hover {
+          color: #333;
+        }
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input {
+        padding: 0.5rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        padding: 0.6rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .preview {
+        .image-preview {
+          max-width: 150px;
+          max-height: 150px;
+          border-radius: 8px;
+          object-fit: cover;
+          border: 1px solid #ccc;
+        }
+      }
+    }
+  }
+}
+
 .centre-container {
   padding: 2rem;
 
@@ -36,6 +114,18 @@
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 8px;
+    }
+
+    .preview {
+      margin-top: 10px;
+
+      .image-preview {
+        max-width: 150px;
+        max-height: 150px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        object-fit: cover;
+      }
     }
 
     button {

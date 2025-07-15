@@ -13,13 +13,28 @@
     <button (click)="onSearch()">🔍 Rechercher</button>
   </div>
 
-  <div *ngIf="showAddForm" class="add-product-form">
-    <input [(ngModel)]="newProduct.name" placeholder="Nom">
-    <input [(ngModel)]="newProduct.category" placeholder="Catégorie">
-    <input [(ngModel)]="newProduct.marque" placeholder="Marque">
-    <input [(ngModel)]="newProduct.barcode" placeholder="Code-barres">
-    <input [(ngModel)]="newProduct.image_url" placeholder="URL image">
-    <button (click)="onAddProduct()">✅ Enregistrer</button>
+  <div *ngIf="showAddForm" class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Ajouter un produit</h3>
+        <button class="close-btn" (click)="closeForm()">❌</button>
+      </div>
+
+      <div class="modal-body add-product-form">
+        <input [(ngModel)]="newProduct.name" placeholder="Nom">
+        <input [(ngModel)]="newProduct.category" placeholder="Catégorie">
+        <input [(ngModel)]="newProduct.marque" placeholder="Marque">
+        <input [(ngModel)]="newProduct.barcode" placeholder="Code-barres">
+        <input type="file" (change)="onImageSelected($event)" accept="image/*">
+
+        <div *ngIf="imagePreviewUrl" class="preview">
+          <p>Aperçu de l'image :</p>
+          <img [src]="imagePreviewUrl" alt="Aperçu image" class="image-preview">
+        </div>
+
+        <button (click)="onAddProduct()">✅ Enregistrer</button>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="products.length > 0" class="product-table">
@@ -44,15 +59,38 @@
     </div>
   </div>
 
-  <div *ngIf="selectedProduct" class="product-details">
-    <h4>Détails du produit</h4>
-    <input [(ngModel)]="selectedProduct.name" placeholder="Nom">
-    <input [(ngModel)]="selectedProduct.category" placeholder="Catégorie">
-    <input [(ngModel)]="selectedProduct.marque" placeholder="Marque">
-    <input [(ngModel)]="selectedProduct.barcode" placeholder="Code-barres">
-    <input [(ngModel)]="selectedProduct.image_url" placeholder="URL image">
-    <button (click)="onUpdateProduct()">💾 Enregistrer</button>
-    <button class="close-btn" (click)="selectedProduct = null">❌ Fermer</button>
+ <div *ngIf="selectedProduct" class="modal-overlay" (click)="selectedProduct = null">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Modifier le produit</h3>
+        <button class="close-btn" (click)="selectedProduct = null">❌</button>
+      </div>
+
+      <div class="modal-body add-product-form">
+        <input [(ngModel)]="selectedProduct.name" placeholder="Nom">
+        <input [(ngModel)]="selectedProduct.category" placeholder="Catégorie">
+        <input [(ngModel)]="selectedProduct.marque" placeholder="Marque">
+        <input [(ngModel)]="selectedProduct.barcode" placeholder="Code-barres">
+        <input type="file" (change)="onUpdateImageSelected($event)" accept="image/*">
+
+        <div class="aperçu-image">
+          <div *ngIf="editImagePreviewUrl || selectedProduct.image_url" class="preview">
+            <p>Aperçu de l'image :</p>
+            <img
+              [src]="editImagePreviewUrl || selectedProduct.image_url"
+              alt="Aperçu image"
+              class="image-preview"
+            >
+          </div>
+  
+          <div *ngIf="updateImagePreviewUrl" class="preview">
+            <p>Aperçu de la nouvelle image :</p>
+            <img [src]="updateImagePreviewUrl" alt="Aperçu image" class="image-preview">
+          </div>
+
+        <button (click)="onUpdateProduct()">💾 Enregistrer</button>
+      </div>
+    </div>
   </div>
 
 </div>

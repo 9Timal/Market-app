@@ -23,7 +23,13 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String
-  }
+  },
+  image_url: {
+    type: String,
+  },         // URL publique de l’image sur Cloudinary
+  image_public_id:{
+    type: String
+  }     // ID unique Cloudinary (utile pour suppression)
 });
 
 module.exports = mongoose.model('Product', productSchema);

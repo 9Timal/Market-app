@@ -17,6 +17,7 @@ import { DashboardAccessComponent } from './pages/dashboard/dashboard-access/das
 import { StoreAccessGuard } from './services/storeAccess.guard';
 import { DashboardInviteComponent } from './pages/dashboard/dashboard-invite/dashboard-invite.component';
 import { InvitationsComponent } from './pages/invitations/invitations.component';
+import { DashboardProductComponent } from './pages/dashboard/dashboard-product/dashboard-product.component';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'centre/stores', component: CentreStoreComponent, canActivate: [authGuard, superAdminGuard],  },
   { path: 'dashboard/access', component: DashboardAccessComponent, canActivate: [authGuard, StoreAccessGuard] },
   { path: 'dashboard/invite', component: DashboardInviteComponent, canActivate: [authGuard, StoreAccessGuard] },
+  { path: 'dashboard/product', component: DashboardProductComponent, canActivate: [authGuard, StoreAccessGuard] },
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }

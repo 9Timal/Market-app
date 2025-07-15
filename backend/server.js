@@ -7,6 +7,8 @@ const cors = require('cors');
 // On importe notre fonction de connexion à MongoDB (elle vient du fichier db.js)
 const connectDB = require('./config/db');
 
+require('dotenv').config();
+
 // On appelle connectDB() pour établir la connexion à MongoDB dès le démarrage
 connectDB();
 
@@ -15,6 +17,7 @@ const app = express();
 
 // Middleware pour accepter les requêtes en JSON
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Middleware pour gérer les CORS (utile pour les appels depuis le frontend)
 app.use(cors());

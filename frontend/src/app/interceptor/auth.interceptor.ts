@@ -31,6 +31,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
       // Si erreur d’authentification : logout
       if (error.status === 401 || error.status === 403) {
         console.warn('🔒 Token invalide ou expiré. Déconnexion en cours.');
+        console.log(error);
         authService.logout();
       }
 

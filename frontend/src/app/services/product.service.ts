@@ -21,11 +21,11 @@ export class ProductService {
     return this.http.get<Product[]>(this.API);
   }
 
-  addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.API, product);
+ addProduct(productData: FormData): Observable<any> {
+    return this.http.post<any>(this.API, productData);
   }
 
-  updateProduct(id: string, product: Product): Observable<any> {
+  updateProduct(id: string, product: Product | FormData): Observable<any> {
     return this.http.put(`${this.API}/${id}`, product);
   }
 
